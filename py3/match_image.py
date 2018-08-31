@@ -1,10 +1,10 @@
+#!/usr/bin/env python
 
 import cv2
-from matplotlib import pyplot as plt
 
-def find_image(query_img_path, page_img_path, draw=False):
-    img1 = cv2.imread('query_image.png',0)          # queryImage
-    img2 = cv2.imread('page_image.png',0) # trainImage
+def find_image(query_img_path, page_img_path):
+    img1 = cv2.imread(query_img_path,0)          # queryImage
+    img2 = cv2.imread(page_img_path,0) # trainImage
 
     # Initiate SIFT detector
     sift = cv2.xfeatures2d.SIFT_create()
@@ -24,7 +24,7 @@ def find_image(query_img_path, page_img_path, draw=False):
 
     matched_point_indices = []
     # Need to draw only good matches, so create a mask
-    matchesMask = [[0,0] for i in xrange(len(matches))]
+    matchesMask = [[0,0] for i in range(len(matches))]
 
     # ratio test as per Lowe's paper
     for i,(m,n) in enumerate(matches):
@@ -46,18 +46,7 @@ def find_image(query_img_path, page_img_path, draw=False):
     # print (min_x, min_y), (max_x, max_y)
     center_point = min_x + (max_x - min_x) / 2, min_y + (max_y - min_y) / 2
 
-    if draw:
-        draw_params = dict(matchColor = (0,255,0),
-                        singlePointColor = (255,0,0),
-                        matchesMask = matchesMask,
-                        flags = 0)
-
-        img3 = cv2.drawMatchesKnn(img1,kp1,img2,kp2,matches,None,**draw_params)
-
-        plt.imshow(img3,),plt.show()
-
     return center_point
-
 
 
 def main():

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from chrome_utils import HeadlessChromeDriver
+from match_image import find_image
 
 class MealpalClient:
     MEALPAL_URL = 'https://www.mealpal.com'
@@ -25,14 +26,19 @@ class MealpalClient:
     def take_screenshot(self, filename: str):
         self.driver.screenshot(filename)
 
-
+    def order(self, image_path):
+        file_path = '/Users/etai/screenshot_before.png'
+        self.driver.screenshot(file_path)
+        image_coordinates = find_image(image_path, file_path)
+        print(image_coordinates)
+        self.driver.click_element_from_point(image_coordinates[0], image_coordinates[1])
 
 
 def main():
     client = MealpalClient('etplush@gmail.com', '7*Bd6!5EB8zkd3f2')
     client.login()
-    print(client.driver.get_element_id_from_point(380, 1200))
-    client.take_screenshot('/Users/etai/screenshot.png')
+    client.order('query_image.png')
+    client.take_screenshot('/Users/etai/screenshot_after.png')
 
 
 if __name__ == '__main__':

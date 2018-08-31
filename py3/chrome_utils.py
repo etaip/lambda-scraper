@@ -2,15 +2,15 @@
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class HeadlessChromeDriver:
-    def __init__(self, width: int = 1200, height: int = 5000):
+    def __init__(self, width: int = 1200, height: int = 2400, use_in_headful_mode: bool = False):
         options = webdriver.ChromeOptions()
-        options.add_argument('headless')
+        if not use_in_headful_mode:
+            options.add_argument('headless')
+
         options.add_argument('window-size={}x{}'.format(width, height))
         self.driver = webdriver.Chrome(chrome_options=options)
 
@@ -39,9 +39,12 @@ class HeadlessChromeDriver:
         except TimeoutException:
             pass
 
-    def get_element_id_from_point(self, x: int, y: int) -> str:
-        id = self.driver.execute_script('return document.elementFromPoint({}, {}).id'.format(x, y))
-        return id
+    def click_element_from_point(self, x: int, y: int):
+        el = self.driver.execute_script('return document.elementFromPoint({}, {})'.format(x//2, y//2))
+        if el:
+            print(el.tag_name, el.get_attribute('src'))
+            el.click()
+
 
 def main():
     driver = HeadlessChromeDriver()
