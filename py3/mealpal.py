@@ -35,7 +35,7 @@ class MealpalClient:
 
 
 def main():
-    client = MealpalClient('etplush@gmail.com', '7*Bd6!5EB8zkd3f2')
+    client = MealpalClient('etplush@gmail.com', '')
     client.login()
     client.order('query_image.png')
     client.take_screenshot('/Users/etai/screenshot_after.png')
